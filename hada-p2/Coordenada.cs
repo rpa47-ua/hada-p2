@@ -47,13 +47,8 @@ namespace Hada
         }
         public Coordenada(string fila, string columna)
         {
-            int filaInt, columnaInt;
-
-            int.TryParse(fila, out filaInt);
-            int.TryParse(columna, out columnaInt);
-
-            Fila = filaInt;
-            Columna = columnaInt;
+            Fila =int.Parse(fila);
+            Columna = int.Parse(columna);
         }
         public override string ToString()
         {
@@ -69,6 +64,13 @@ namespace Hada
                 return false;
 
             Coordenada coordenada = (Coordenada)obj;
+            return this.Fila == coordenada.Fila && this.Columna == coordenada.Columna;
+        }
+        public bool Equals(Coordenada coordenada)
+        {
+            if (coordenada == null)
+                return false;
+
             return this.Fila == coordenada.Fila && this.Columna == coordenada.Columna;
         }
     }

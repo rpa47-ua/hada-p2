@@ -4,41 +4,94 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hada;
-
-class Barco
+namespace Hada
 {
-    public Dictionary<Coordenada, String> CoordenadasBarcos { get; set; } //mirar a ver que pone que unicamente pone que es de lectura
-    public string nombre { get; set; }
-    public int NumDanyos { get; set; }
-
-    //mirar si poner static
-    public Barco(string nombre, int longitud, char orientacion, Coordenada coordenadaInicio)
+    class Barco
     {
-        this.nombre = nombre;
-        this.NumDanyos = 0;
 
-        if(orientacion == 'h')
+        public Dictionary<Coordenada, String> CoordenadasBarcos { get; private set; }
+        public string Nombre { get; set; }
+        public int NumDanyos { get; set; }
+
+        public EventHandler<TocadoArgs> eventoTocado;
+        public EventHandler<HundidoArgs> eventoHundido;
+
+        public Barco(string nombre, int longitud, char orientacion, Coordenada coordenadaInicio)
         {
-            for(int i=0; i<longitud; i++)
+            Nombre = nombre;
+            NumDanyos = 0;
+            CoordenadasBarcos = new Dictionary<Coordenada, string>();
+
+            if (orientacion == 'h')
             {
-                CoordenadasBarcos.Add(Coordenada(coordenadaInicio.fila, coordenadaInicio.columna + i), nombre);
+                for (int i = 0; i < longitud; i++)
+                {
+                    CoordenadasBarcos.Add(Coordenada(coordenadaInicio.fila, coordenadaInicio.columna + i), nombre);
+                }
+            }
+            else if (orientacion == 'v')
+            {
+                for (int i = 0; i < longitud; i++)
+                {
+                    CoordenadasBarcos.Add(Coordenada(coordenadaInicio.fila + i, coordenadaInicio.columna), nombre);
+                }
             }
         }
-        else if (orientacion == 'v')
+
+        public void Disparo(Coordenada c)
         {
-            for(int i=0; i<longitud; i++)
+            if(CoordenadasBarcos.ContainsKey(c))
             {
-                CoordenadasBarcos.Add(Coordenada(coordenadaInicio.fila + i, coordenadaInicio.columna), nombre);
+                if (!CoordenadasBarcos[c].EndsWith("_T"))
+                {
+                    CoordenadasBarcos[c] = CoordenadasBarcos[c] + "_T";
+                    NumDanyos++;
+                    //evento tocado
+                    OnTocado(new TocadoArgs(Nombre, c));
+                }
+
+                if(this.Hundido())
+                {
+                    //evento hundido
+                    OnHundido(new HundidoArgs(Nombre));
+                }
             }
         }
-    }
 
-    public void Disparo(Coordenada c)
-    {
-        foreach(var cord in CoordenadasBarcos)
+        public bool Hundido()
         {
+            bool hundido = true;
+            foreach( String etiqueta in CoordenadasBarcos.Values )
+            {
+                if (!etiqueta.EndsWith("_T")) hundido = false;
+            }
 
+            return hundido;
+        }
+
+        public override string ToString()
+        {
+            string estado = this.Hundido() ? "[True]" : "[False]";
+            string cadBarco = $"[{Nombre}] - DAÑOS: [{NumDanyos}] - HUNDIDO: [{estado}] - COORDENADAS: ";
+
+            foreach(Coordenada cords in CoordenadasBarcos)
+            {
+                string cord = cords.ToString();
+                cadBarco += $"[{cord} :{cords.Value}] ";
+            }
+
+            cadBarco += "\n";
+            return cadBarco;
+        }
+
+        protected virtual void  OnTocado(TocadoArgs args)
+        {
+            eventoTocado?.Invoke(this, args);
+        }
+
+        protected virtual void OnHundido(HundidoArgs args)
+        {
+            eventoHundido?.Invoke(this, args);
         }
     }
 }

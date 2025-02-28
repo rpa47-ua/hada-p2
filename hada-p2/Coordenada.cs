@@ -55,5 +55,21 @@ namespace Hada
             Fila = filaInt;
             Columna = columnaInt;
         }
+        public override string ToString()
+        {
+            return $"({Fila},{Columna})";
+        }
+        public override int GetHashCode()
+        {
+            return this.Fila.GetHashCode() ^ Columna.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is Coordenada))
+                return false;
+
+            Coordenada coordenada = (Coordenada)obj;
+            return this.Fila == coordenada.Fila && this.Columna == coordenada.Columna;
+        }
     }
 }

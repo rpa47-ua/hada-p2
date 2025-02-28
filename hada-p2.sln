@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hada-p2", "hada-p2\hada-p2.csproj", "{5645ACF4-3675-4B4A-B22F-73AC05B26996}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5645ACF4-3675-4B4A-B22F-73AC05B26996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5645ACF4-3675-4B4A-B22F-73AC05B26996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5645ACF4-3675-4B4A-B22F-73AC05B26996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5645ACF4-3675-4B4A-B22F-73AC05B26996}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91DC1940-7AE3-4E43-A703-87CBB92C6B13}
+	EndGlobalSection
+EndGlobal

@@ -34,6 +34,8 @@ namespace Hada
         private List<Barco> barcosEliminados;
         private Dictionary<Coordenada, string> casillasTablero;
 
+        public event EventHandler<EventArgs> eventoFinPartida;
+
         public Tablero(int tamTablero, List<Barco> barcos)
         {
             TamTablero = tamTablero;
@@ -42,20 +44,20 @@ namespace Hada
             coordenadaDisparadas = new List<Coordenada>();
             coordenadasTocadas = new List<Coordenada>();
             barcosEliminados = new List<Barco>();
-            casillasTablero = new Dictionary<Coordenada, string>;
+            casillasTablero = new Dictionary<Coordenada, string>();
 
             inicializaCasillasTablero();
         }
 
         private void inicializaCasillasTablero()
-        {
+        { //Mirar si es < o <= 
             //Ponemos por defecto todo el tablero lleno de agua
             for(int fila = 0; fila < TamTablero; fila++)
             {
                 for(int col = 0; col < TamTablero; col++)
                 {
                     Coordenada coord = new Coordenada(fila, col);
-                    casillasTablero[cord] = "AGUA";
+                    casillasTablero[coord] = "AGUA";
                 }
             }
 
@@ -68,6 +70,77 @@ namespace Hada
                     casillasTablero[coord] = b.Nombre;
                 }
             }
+        }
+
+        public void Disparar(Coordenada c)
+        {//Mirar si es > i >= 
+            if(c.Fila < 0 || c.Fila > TamTablero || c.Columna < 0 || c.Columna > TamTablero)
+            { //repasar tema del ToString Coordenada
+                Console.WriteLine($"La coordenada {c.ToString()} está fuera de las dimensiones del tablero");
+            }
+            else
+            {
+                foreach(Barco b in barcos)
+                {
+                    b.Disparo(c);
+                }
+            }
+
+        }
+
+        public string DibujarTablero()
+        {//mirar tema de dimensiones
+            string tablero = "";
+            int i = 1;
+            
+            foreach(var coord in casillasTablero)
+            {
+
+                tablero += $"[{coord.Value}]";
+                if(i==TamTablero)
+                {
+                    tablero += "\n";
+                    i = 0;
+                }
+                
+                i++; 
+            }
+        }
+
+        public override string ToString()
+        {
+            string info = "";
+            foreach(Barco b in barcos)
+            {
+                info += b.ToString();
+            }
+
+            info += "Coordenadas disparadas: ";
+            foreach(Coordenadas coord in coordenadaDisparadas)
+            {
+                info += coord.ToString();
+            }
+            // mirar a ver si hace falta \n
+            info += "Coordenadas tocadas: ";
+            foreach(Coordenadas coord in coordenadasTocadas)
+            {
+                info += coord.ToString();
+            }
+
+            info += "\n\n\n";
+            info += "CASILLAS TABLERO\n";
+            info += "-------\";
+            info += DibujarTablero();
+
+            return info;
+        }
+
+        private void cuandoEventoTocado(object sender, TocadoArgs e)
+        {
+        }
+
+        private void cuandoEventoHundido(object sender, HundidoArgs e)
+        {
         }
     }
 }

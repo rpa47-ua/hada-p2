@@ -20,37 +20,37 @@ namespace Hada
         {
             Nombre = nombre;
             NumDanyos = 0;
-            CoordenadasBarcos = new Dictionary<Coordenada, string>();
+            CoordenadasBarcos = new Dictionary<Coordenada, String>();
 
             if (orientacion == 'h')
             {
                 for (int i = 0; i < longitud; i++)
                 {
-                    CoordenadasBarcos.Add(Coordenada(coordenadaInicio.fila, coordenadaInicio.columna + i), nombre);
+                    CoordenadasBarcos.Add(new Coordenada(coordenadaInicio.Fila, coordenadaInicio.Columna + i), nombre);
                 }
             }
             else if (orientacion == 'v')
             {
                 for (int i = 0; i < longitud; i++)
                 {
-                    CoordenadasBarcos.Add(Coordenada(coordenadaInicio.fila + i, coordenadaInicio.columna), nombre);
+                    CoordenadasBarcos.Add(new Coordenada(coordenadaInicio.Fila + i, coordenadaInicio.Columna), nombre);
                 }
             }
         }
 
         public void Disparo(Coordenada c)
         {
-            if(CoordenadasBarcos.ContainsKey(c))
+            if (CoordenadasBarcos.ContainsKey(c))
             {
                 if (!CoordenadasBarcos[c].EndsWith("_T"))
                 {
                     CoordenadasBarcos[c] = CoordenadasBarcos[c] + "_T";
                     NumDanyos++;
-                    //evento tocado
+                    //evento tocado (repasasr)
                     OnTocado(new TocadoArgs(Nombre, c));
                 }
 
-                if(this.Hundido())
+                if (this.Hundido())
                 {
                     //evento hundido
                     OnHundido(new HundidoArgs(Nombre));
@@ -61,7 +61,7 @@ namespace Hada
         public bool Hundido()
         {
             bool hundido = true;
-            foreach( String etiqueta in CoordenadasBarcos.Values )
+            foreach (String etiqueta in CoordenadasBarcos.Values)
             {
                 if (!etiqueta.EndsWith("_T")) hundido = false;
             }
@@ -74,17 +74,16 @@ namespace Hada
             string estado = this.Hundido() ? "[True]" : "[False]";
             string cadBarco = $"[{Nombre}] - DAÑOS: [{NumDanyos}] - HUNDIDO: [{estado}] - COORDENADAS: ";
 
-            foreach(Coordenada cords in CoordenadasBarcos)
+            foreach (KeyValuePair<Coordenada, String> coord in CoordenadasBarcos)
             {
-                string cord = cords.ToString();
-                cadBarco += $"[{cord} :{cords.Value}] ";
+                cadBarco += $"[{coord.Key.ToString()} :{coord.Value}] ";
             }
 
             cadBarco += "\n";
             return cadBarco;
         }
 
-        protected virtual void  OnTocado(TocadoArgs args)
+        protected virtual void OnTocado(TocadoArgs args)
         {
             eventoTocado?.Invoke(this, args);
         }

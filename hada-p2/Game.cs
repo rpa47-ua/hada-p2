@@ -20,14 +20,13 @@ namespace Hada
         }
         private void gameLoop()
         {
-            barcos.Add(new Barco("Barco1", 3, 'h', new Coordenada(0, 0)));
-            barcos.Add(new Barco("Barco2", 4, 'v', new Coordenada(2, 3)));
-            barcos.Add(new Barco("Barco3", 2, 'h', new Coordenada(5, 5)));
-            tablero = new Tablero(10, barcos);
+            barcos.Add(new Barco("THOR", 1, 'h', new Coordenada(0, 0)));
+            barcos.Add(new Barco("LOKI", 2, 'v', new Coordenada(1, 2)));
+            barcos.Add(new Barco("MAYA", 3, 'h', new Coordenada(3, 1)));
+            tablero = new Tablero(4, barcos);
             tablero.eventoFinPartida += cuandoEventoFinPartida;
             while (!finPartida)
             {
-                Console.Clear();
                 Console.WriteLine(tablero.ToString());  // Mostramos el estado actual del tablero.
 
 
@@ -73,7 +72,7 @@ namespace Hada
                 }
             }
 
-            
+
             return false;
         }
 

@@ -27,7 +27,10 @@ namespace Hada
             {
                 if (value < 0 || value > 9)
                     throw new ArgumentOutOfRangeException("Columna debe estar entre 0 y 9.");
-                columna = value;
+                else // AÑADIDO
+                {
+                    columna = value;
+                }
             }
         }
         public Coordenada()
@@ -47,7 +50,7 @@ namespace Hada
         }
         public Coordenada(string fila, string columna)
         {
-            Fila =int.Parse(fila);
+            Fila = int.Parse(fila);
             Columna = int.Parse(columna);
         }
         public override string ToString()

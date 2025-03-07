@@ -46,6 +46,12 @@ namespace Hada
             barcosEliminados = new List<Barco>();
             casillasTablero = new Dictionary<Coordenada, string>();
 
+            foreach (var barco in barcos)
+            {
+                barco.eventoTocado += cuandoEventoTocado;
+                barco.eventoHundido += cuandoEventoHundido;
+            }
+
             inicializaCasillasTablero();
         }
 
@@ -119,22 +125,24 @@ namespace Hada
                 info += b.ToString();
             }
 
-            info += "Coordenadas disparadas: ";
+            info += "Coordenadas disparadas:";
             foreach (Coordenada coord in coordenadaDisparadas)
             {
+                info += " ";
                 info += coord.ToString();
             }
             // mirar a ver si hace falta \n
             info += "\n";
-            info += "Coordenadas tocadas: ";
+            info += "Coordenadas tocadas:";
             foreach (Coordenada coord in coordenadasTocadas)
             {
+                info += " ";
                 info += coord.ToString();
             }
 
             info += "\n\n\n";
             info += "CASILLAS TABLERO\n";
-            info += "-------";
+            info += "-------\n";
             info += DibujarTablero();
 
             return info;
@@ -142,25 +150,24 @@ namespace Hada
 
         private void cuandoEventoTocado(object sender, TocadoArgs e)
         {//REPASAR
-            casillasTablero[e.coordenadaImpacto] = e.nommbre + "_T";
 
-            if (!coordenadasTocadas.Contains(e.coordenadaImpacto))
+            if (!coordenadasTocadas.Contains(e.CoordenadaImpacto))
             {
-                coordenadasTocadas.Add(e.coordenadaImpacto);
+                coordenadasTocadas.Add(e.CoordenadaImpacto);
             }
 
-            Console.WriteLine($"TABLERO: Barco [{e.nombre}] tocado en Coordenada: [{e.cordenadaImpacto.Fila},{e.cordenadaImpacto.Columna}");
+            Console.WriteLine($"TABLERO: Barco [{e.Nombre}] tocado en: [{e.CoordenadaImpacto.Fila},{e.CoordenadaImpacto.Columna}]");
         }
 
         private void cuandoEventoHundido(object sender, HundidoArgs e)
-        {//REPASAR
+        {//REPASAR Ponero Barco Hundido
             Barco hundido = (Barco)sender;
             if (!barcosEliminados.Contains(hundido))
             {
                 barcosEliminados.Add(hundido);
             }
 
-            Console.WriteLine($"TABLERO: Barco {e.nombre} hundido!!");
+            Console.WriteLine($"TABLERO: Barco {e.Nombre} hundido!!");
             if (barcosEliminados.Count == barcos.Count)
             {
                 eventoFinPartida?.Invoke(this, EventArgs.Empty);

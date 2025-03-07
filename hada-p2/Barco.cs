@@ -13,8 +13,8 @@ namespace Hada
         public string Nombre { get; set; }
         public int NumDanyos { get; set; }
 
-        public EventHandler<TocadoArgs> eventoTocado;
-        public EventHandler<HundidoArgs> eventoHundido;
+        public event EventHandler<TocadoArgs> eventoTocado;
+        public event EventHandler<HundidoArgs> eventoHundido;
 
         public Barco(string nombre, int longitud, char orientacion, Coordenada coordenadaInicio)
         {
@@ -47,13 +47,14 @@ namespace Hada
                     CoordenadasBarcos[c] = CoordenadasBarcos[c] + "_T";
                     NumDanyos++;
                     //evento tocado (repasasr)
-                    OnTocado(new TocadoArgs(Nombre, c));
+                    eventoTocado?.Invoke(this, new TocadoArgs(Nombre, c));
+
                 }
 
                 if (this.Hundido())
                 {
                     //evento hundido
-                    OnHundido(new HundidoArgs(Nombre));
+                    eventoHundido?.Invoke(this, new HundidoArgs(Nombre));
                 }
             }
         }
@@ -72,7 +73,7 @@ namespace Hada
         public override string ToString()
         {
             string estado = this.Hundido() ? "[True]" : "[False]";
-            string cadBarco = $"[{Nombre}] - DAÑOS: [{NumDanyos}] - HUNDIDO: [{estado}] - COORDENADAS: ";
+            string cadBarco = $"[{Nombre}] - DAÑOS: [{NumDanyos}] - HUNDIDO: {estado} - COORDENADAS: ";
 
             foreach (KeyValuePair<Coordenada, String> coord in CoordenadasBarcos)
             {
@@ -81,16 +82,6 @@ namespace Hada
 
             cadBarco += "\n";
             return cadBarco;
-        }
-
-        protected virtual void OnTocado(TocadoArgs args)
-        {
-            eventoTocado?.Invoke(this, args);
-        }
-
-        protected virtual void OnHundido(HundidoArgs args)
-        {
-            eventoHundido?.Invoke(this, args);
         }
     }
 }
